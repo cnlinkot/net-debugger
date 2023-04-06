@@ -74,14 +74,6 @@ func initNet() {
 	}
 }
 
-func client() {
-
-}
-
-func server() {
-
-}
-
 func input(w io.Writer) {
 	in := os.Stdin
 	reader := bufio.NewReader(in)
