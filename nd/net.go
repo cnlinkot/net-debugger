@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"net-debugger/util"
+	"net/netip"
 	"strconv"
 )
 
@@ -52,7 +53,7 @@ type udpConnector struct {
 	Port int
 }
 
-func Udp(host string, port string) *udpConnector {
+func Udp(host string, port string) Net {
 	p, err := strconv.Atoi(port)
 	util.CheckFatalError(err, "address must be port number when protocol is udp")
 	return &udpConnector{Host: host, Port: p}
@@ -68,8 +69,9 @@ func (u udpConnector) Connect() net.Conn {
 }
 
 func (u udpConnector) Listen() net.Conn {
-	log.Printf("try listen on... udp->0.0.0.0:%v", u.Port)
-	udp, err := net.ListenUDP("udp", &net.UDPAddr{IP: net.IPv4(0, 0, 0, 0), Port: u.Port})
+	addr := fmt.Sprintf("%s, %d", u.Host, u.Port)
+	log.Printf("try listen on... udp->%s", addr)
+	udp, err := net.ListenUDP("udp", net.UDPAddrFromAddrPort(netip.MustParseAddrPort(addr)))
 	util.CheckFatalError(err, "failed to listen")
 	log.Printf("wait for message...")
 	return udp
