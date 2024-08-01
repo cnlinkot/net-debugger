@@ -69,7 +69,7 @@ func (u udpConnector) Connect() net.Conn {
 }
 
 func (u udpConnector) Listen() net.Conn {
-	addr := fmt.Sprintf("%s, %d", u.Host, u.Port)
+	addr := fmt.Sprintf("%s:%d", u.Host, u.Port)
 	log.Printf("try listen on... udp->%s", addr)
 	udp, err := net.ListenUDP("udp", net.UDPAddrFromAddrPort(netip.MustParseAddrPort(addr)))
 	util.CheckFatalError(err, "failed to listen")
